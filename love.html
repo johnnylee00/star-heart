@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心星星特效</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            height: 100vh; 
+            background: radial-gradient(#1a1a2e, #000); /* 深色渐变背景更显星星 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 隐藏溢出的星星 */
+        }
+
+        /* 跳动的爱心 */
+        .heart {
+            width: 120px;
+            height: 120px;
+            background-color: #ff2e63;
+            transform: rotate(45deg);
+            position: relative;
+            animation: heartbeat 1.2s infinite ease-in-out;
+            z-index: 10; /* 让爱心在星星上方 */
+            box-shadow: 0 0 30px #ff2e63, 0 0 60px rgba(255, 46, 99, 0.5); /* 爱心发光效果 */
+        }
+        .heart::before, .heart::after {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background-color: #ff2e63;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px #ff2e63;
+        }
+        .heart::before { top: -60px; left: 0; }
+        .heart::after { top: 0; left: -60px; }
+
+        /* 爱心心跳动画 */
+        @keyframes heartbeat {
+            0%, 100% { transform: rotate(45deg) scale(1); }
+            25% { transform: rotate(45deg) scale(1.15); }
+            40% { transform: rotate(45deg) scale(0.95); }
+            60% { transform: rotate(45deg) scale(1.1); }
+        }
+
+        /* 星星样式 */
+        .star {
+            position: absolute;
+            color: #ffdf00; /* 金黄色 */
+            font-size: 20px;
+            animation: fall linear infinite, twinkle ease-in-out infinite;
+            opacity: 0;
+            text-shadow: 0 0 10px #ffdf00, 0 0 20px #ffdf00; /* 星星发光 */
+        }
+
+        /* 星星飘落动画 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 星星闪烁动画 */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart"></div>
+
+    <script>
+        // 生成随机星星的函数
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // 随机星星符号（★或☆）
+            star.innerHTML = Math.random() > 0.5 ? '★' : '☆';
+            
+            // 随机位置（水平）
+            star.style.left = Math.random() * 100 + 'vw';
+            
+            // 随机大小
+            const size = Math.random() * 15 + 8; // 8-23px
+            star.style.fontSize = size + 'px';
+            
+            // 随机飘落速度（2-8秒）
+            const duration = Math.random() * 6 + 2;
+            star.style.animationDuration = `${duration}s, ${Math.random() * 2 + 1}s`;
+            
+            // 随机旋转角度
+            star.style.transform = `rotate(${Math.random() * 360}deg)`;
+            
+            document.body.appendChild(star);
+            
+            // 星星落地后移除，避免卡顿
+            setTimeout(() => {
+                star.remove();
+            }, duration * 1000);
+        }
+
+        // 每隔100毫秒生成一颗星星
+        setInterval(createStar, 100);
+    </script>
+</body>
+</html>
